@@ -1,15 +1,16 @@
 const
-execute = require('./mysql_con.js')
+  execute = require('./mysql_con.js')
 const express = require('express')
 const app = express()
 const port = 80
 
-//execute.select('SELECT 1 + 1 AS solution')
-execute.sql("select * from people")
+execute.createPeopleTable()
 
-
-app.get('/', (req, res) => {
-  res.send(JSON.stringify(execute.select("SELECT 1 + 1 AS solution")[0]))
+   
+app.get('/', async (req, res) => {
+  await execute.insert("insert into people (name) values ('diego')")
+  const dados = await execute.select("SELECT * from people");
+  res.send(dados)
 })
 
 app.listen(port, () => {
